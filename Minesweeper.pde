@@ -1,12 +1,12 @@
 import de.bezier.guido.*;
-public final int NUM_ROWS = 20;
-public final int NUM_COLS = 20;
+public final int NUM_ROWS = 30; //NUM_ROWS = 20;
+public final int NUM_COLS = 30; //NUM_COLS = 20;
 public final int NUM_BOMBS = 1;
 private MSButton[][] buttons; //2d array of minesweeper buttons
 private ArrayList <MSButton> bombs = new ArrayList <MSButton> ();; //ArrayList of just the minesweeper buttons that are mined
 void setup ()
 {
-    size(400, 400);
+    size(600, 600); //size(400,400);
     textAlign(CENTER,CENTER);
     
     // make the manager
@@ -29,6 +29,14 @@ public void setBombs()
     	if(!(bombs.contains(buttons[r][c]))){
     		bombs.add(buttons[r][c]);
     		System.out.println("("+ r + ", " + c + ")");
+    	}
+	}
+	while(bombs.size() < NUM_COLS){
+		int r2 = (int)(Math.random() * NUM_ROWS);
+    	int c2 = (int)(Math.random() * NUM_COLS);
+    	if(!(bombs.contains(buttons[r2][c2]))){
+    		bombs.add(buttons[r2][c2]);
+    		System.out.println("("+ r2 + ", " + c2 + ")");
     	}
 	}
 }
@@ -62,8 +70,8 @@ public class MSButton
     
     public MSButton ( int rr, int cc )
     {
-        width = 400/NUM_COLS;
-        height = 400/NUM_ROWS;
+        width = 600/NUM_COLS; //400/NUM_COLS
+        height = 600/NUM_ROWS; //400/NUM_ROWS
         r = rr;
         c = cc; 
         x = c*width;
@@ -100,12 +108,34 @@ public class MSButton
         	displayLosingMessage();
         }
         else if(countBombs(r,c) > 0){
-        	fill(0);
-        	textSize(10);
-        	text("there are: " + (int)countBombs(r,c) + "remaining" , x, y);
+        	label = "" + countBombs(r , c);
+        	
         }
         else{
-        	mousePressed();
+        		if(isValid(r, c -1) && (buttons[r][c - 1].isClicked() == false)){
+        			buttons[r ][c - 1].mousePressed();
+        		}
+        		if(isValid(r, c + 1) && (buttons[r][c + 1].isClicked() == false)){
+        			buttons[r ][c + 1].mousePressed();
+        		}
+        		if(isValid(r + 1, c) && (buttons[r + 1][c].isClicked() == false)){
+        			buttons[r + 1][c].mousePressed();
+        		}
+        		if(isValid(r - 1, c) && (buttons[r - 1][c].isClicked() == false)){
+        			buttons[r - 1][c].mousePressed();
+        		}
+        		if(isValid(r - 1, c - 1) && (buttons[r - 1][c].isClicked() == false)){
+        			buttons[r - 1][c - 1].mousePressed();
+        		}
+        		if(isValid(r + 1, c + 1) && (buttons[r + 1][c + 1].isClicked() == false)){
+        			buttons[r + 1][c + 1].mousePressed();
+        		}
+        		if(isValid(r - 1, c + 1) && buttons[r - 1][c + 1].isClicked() == false){
+        			buttons[r - 1][c + 1].mousePressed();
+        		}
+        		if(isValid(r + 1, c -1) && buttons[r + 1][c - 1].isClicked() == false){
+        			buttons[r + 1][c - 1].mousePressed();
+        		}
         }
         //your code here
     }
@@ -119,7 +149,7 @@ public class MSButton
         else if(clicked)
             fill( 200 );
         else 
-            fill( 100 );
+            fill( 10,100,0 );
 
         rect(x, y, width, height);
         fill(0);
@@ -154,6 +184,5 @@ public class MSButton
         return numBombs;
     }
 }
-
-
+ 
 
